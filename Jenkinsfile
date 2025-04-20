@@ -4,32 +4,36 @@ pipeline {
     stages {
         stage('Pull Code') {
             steps {
-                git branch: 'main', credentialsId: 'github-token', url: 'https://github.com/PranavKamlaskar/iot-project.git'
+                git url: 'https://github.com/PranavKamlaskar/iot-project.git', branch: 'main'
             }
         }
 
-	stage('Install Requirements') {
-    	    steps {
-        	sh '''
-            	    python3 -m venv venv
+        stage('Install Requirements') {
+            steps {
+                sh '''
+                    python3 -m venv venv
                     . venv/bin/activate
-		    pip install --upgrade pip --break-system-packages
-            	    pip install --break-system-packages -r requirements.txt
-        	'''
-    	    }	   
-	}	
-
+                    pip install --upgrade pip --break-system-packages
+                    pip install --break-system-packages -r requirements.txt
+                '''
+            }
+        }
 
         stage('Migrate & Collectstatic') {
             steps {
-                sh 'python manage.py migrate'
-                sh 'python manage.py collectstatic --noinput'
+                sh '''
+                    . venv/bin/activate
+                    python manage.py migrate
+                    python manage.py collectstatic --noinput
+                '''
             }
         }
 
         stage('Restart Gunicorn') {
             steps {
-                sh 'sudo systemctl restart gunicorn'
+                sh '''
+                    sudo systemctl restart gunicorn
+                '''
             }
         }
     }
