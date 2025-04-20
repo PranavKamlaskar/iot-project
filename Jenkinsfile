@@ -29,13 +29,11 @@ pipeline {
             }
         }
 
-        stage('Restart Gunicorn') {
-            steps {
-                sh '''
-                    sudo systemctl restart gunicorn
-                '''
-            }
-        }
+	stage('Restart Gunicorn') {
+    	    steps {
+        	sh 'sudo /bin/systemctl restart gunicorn'
+    	    }		
+	}
     }
 }
 
