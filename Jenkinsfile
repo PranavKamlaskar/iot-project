@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Pull Code') {
             steps {
-                git credentialsId: 'github-token', url: 'https://github.com/PranavKamlaskar/iot-project.git'
+                git branch: 'main', credentialsId: 'github-token', url: 'https://github.com/PranavKamlaskar/iot-project.git'
             }
         }
 
